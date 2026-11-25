@@ -1,0 +1,338 @@
+/* Halloween decorations: jack-o'-lanterns, bats, a spider, twinkling stars.
+   All decorative: aria-hidden in the markup, never intercept pointer events.
+   Animation lives only inside prefers-reduced-motion: no-preference; otherwise they sit still. */
+
+.pumpkin,
+.bat,
+.spider,
+.scene__stars--twinkle {
+  pointer-events: none;
+  user-select: none;
+}
+
+/* ---------- Jack-o'-lanterns ---------- */
+.pumpkin {
+  position: absolute;
+  width: 3.5rem;
+  height: auto;
+  overflow: visible;
+}
+.pumpkin__stem {
+  fill: #3f6b2c;
+}
+.pumpkin__rib {
+  fill: #b9531a;
+}
+.pumpkin__body {
+  fill: #e8742a;
+}
+.pumpkin__face {
+  fill: #ffd36b;
+  filter: drop-shadow(0 0 0.35rem var(--color-candle));
+}
+
+.pumpkin--left {
+  left: var(--space-3);
+  bottom: var(--space-2);
+}
+.pumpkin--right {
+  right: var(--space-3);
+  bottom: var(--space-2);
+}
+/* Sits on the top edge of the RIP panel */
+.rip {
+  position: relative;
+}
+.pumpkin--rip {
+  right: var(--space-6);
+  top: -2.6rem;
+}
+
+/* Room below the tombstones so corner pumpkins never overlap them */
+.graveyard__ground {
+  padding-bottom: 4.5rem;
+}
+
+@media (max-width: 639px) {
+  .pumpkin {
+    width: 2.75rem;
+  }
+  .pumpkin--rip {
+    right: var(--space-4);
+    top: -2rem;
+  }
+}
+
+/* ---------- Bats (live in the fixed, clipped night scene) ---------- */
+.bat {
+  position: absolute;
+  z-index: var(--z-moon);
+  fill: #4a5a88;
+  opacity: 0.95;
+}
+.bat--1 {
+  top: 9vh;
+  left: 62%;
+  width: 52px;
+  height: auto;
+}
+.bat--2 {
+  top: 17vh;
+  left: 78%;
+  width: 40px;
+  height: auto;
+}
+.bat--3 {
+  top: 6vh;
+  left: 28%;
+  width: 34px;
+  height: auto;
+}
+
+/* ---------- Spider ---------- */
+.site-header {
+  position: relative;
+}
+.spider {
+  position: absolute;
+  z-index: var(--z-ghosts);
+  top: calc(var(--space-6) * -1);
+  right: var(--space-1);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.spider__thread {
+  display: block;
+  width: 1px;
+  height: 2.25rem;
+  background: var(--color-muted);
+  opacity: 0.7;
+}
+.spider__body {
+  width: 1.5rem;
+  height: 1.5rem;
+  margin-top: -2px;
+}
+.spider__legs {
+  fill: none;
+  stroke: #9aa3b8;
+  stroke-width: 1.3;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.spider__abdomen,
+.spider__head {
+  fill: #1b1f2b;
+  stroke: #9aa3b8;
+  stroke-width: 1;
+}
+.spider__eye {
+  fill: var(--color-blood);
+}
+
+@media (min-width: 1024px) {
+  /* Hang in the margin left of the title */
+  .spider {
+    right: auto;
+    left: -2.25rem;
+  }
+}
+
+/* ---------- Stars: a second layer that twinkles ---------- */
+.scene__stars--twinkle {
+  background-position: 130px 90px;
+  background-size: 310px 230px;
+  opacity: 0.35;
+}
+
+/* ---------- Motion ---------- */
+@keyframes pumpkin-flicker {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  8% {
+    opacity: 0.72;
+  }
+  15% {
+    opacity: 0.95;
+  }
+  33% {
+    opacity: 0.8;
+  }
+  40% {
+    opacity: 1;
+  }
+  62% {
+    opacity: 0.68;
+  }
+  70% {
+    opacity: 0.92;
+  }
+  86% {
+    opacity: 0.78;
+  }
+}
+
+@keyframes bat-fly-right {
+  0% {
+    transform: translate(-15vw, 0);
+  }
+  25% {
+    transform: translate(25vw, -4vh);
+  }
+  50% {
+    transform: translate(60vw, 5vh);
+  }
+  75% {
+    transform: translate(90vw, -3vh);
+  }
+  100% {
+    transform: translate(125vw, 2vh);
+  }
+}
+
+@keyframes bat-fly-left {
+  0% {
+    transform: translate(15vw, 0) scaleX(-1);
+  }
+  30% {
+    transform: translate(-30vw, 4vh) scaleX(-1);
+  }
+  65% {
+    transform: translate(-65vw, -3vh) scaleX(-1);
+  }
+  100% {
+    transform: translate(-100vw, 3vh) scaleX(-1);
+  }
+}
+
+@keyframes wing-flap {
+  from {
+    transform: scaleY(1);
+  }
+  to {
+    transform: scaleY(0.4);
+  }
+}
+
+@keyframes spider-drop {
+  0%,
+  62% {
+    height: 2.25rem;
+  }
+  72% {
+    height: 6rem;
+  }
+  84% {
+    height: 6rem;
+  }
+  94%,
+  100% {
+    height: 2.25rem;
+  }
+}
+
+@keyframes twinkle-a {
+  0%,
+  100% {
+    opacity: 0.45;
+  }
+  50% {
+    opacity: 0.9;
+  }
+}
+@keyframes twinkle-b {
+  0%,
+  100% {
+    opacity: 0.8;
+  }
+  50% {
+    opacity: 0.2;
+  }
+}
+
+@keyframes candle-halo {
+  0%,
+  100% {
+    opacity: 0.55;
+  }
+  20% {
+    opacity: 0.35;
+  }
+  45% {
+    opacity: 0.6;
+  }
+  70% {
+    opacity: 0.4;
+  }
+}
+
+/* Soft light pooled around each tombstone candle (static glow when motion is reduced) */
+.candle::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: 0.2rem;
+  width: 2.6rem;
+  height: 2.6rem;
+  margin-left: -1.3rem;
+  background: radial-gradient(circle, var(--color-candle-glow), transparent 70%);
+  opacity: 0.45;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .pumpkin__face {
+    animation: pumpkin-flicker 2.8s steps(1, end) infinite;
+  }
+  .pumpkin--right .pumpkin__face {
+    animation-delay: -1.1s;
+  }
+  .pumpkin--rip .pumpkin__face {
+    animation-delay: -1.9s;
+  }
+
+  .bat {
+    left: 0;
+    animation: bat-fly-right 26s linear infinite;
+  }
+  .bat--1 {
+    animation-delay: -6s;
+  }
+  .bat--2 {
+    animation-name: bat-fly-left;
+    left: 100%;
+    animation-duration: 34s;
+    animation-delay: -14s;
+  }
+  .bat--3 {
+    animation-duration: 42s;
+    animation-delay: -30s;
+  }
+  .bat__wings {
+    transform-box: fill-box;
+    transform-origin: 50% 60%;
+    animation: wing-flap 0.32s ease-in-out infinite alternate;
+  }
+  .bat--2 .bat__wings {
+    animation-duration: 0.26s;
+  }
+
+  .spider__thread {
+    animation: spider-drop 18s var(--ease-haunt) infinite;
+  }
+
+  .scene__stars {
+    animation: twinkle-a 5s var(--ease-haunt) infinite;
+  }
+  .scene__stars--twinkle {
+    animation: twinkle-b 3.4s var(--ease-haunt) infinite;
+  }
+
+  .candle::after {
+    animation: candle-halo var(--motion-candle-flicker) steps(1, end) infinite;
+    animation-delay: calc(var(--seed, 0) * -2s);
+  }
+}

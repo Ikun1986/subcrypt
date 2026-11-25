@@ -37,12 +37,15 @@ export const MESSAGES = {
   status: 'Choose active or idle.',
 };
 
-/** "12.99" -> 1299. Returns null unless 0.01 <= price <= 100000 with at most two decimals. */
+/**
+ * "12.99" -> 1299. Also accepts a leading "$" and comma thousands ("$1,299.50").
+ * Returns null unless 0.01 <= price <= 100000 with at most two decimals.
+ */
 export function parsePriceToCents(input) {
   if (typeof input !== 'string') return null;
-  const match = /^(\d{1,6})(?:\.(\d{1,2}))?$/.exec(input.trim());
+  const match = /^\$?(\d{1,3}(?:,\d{3})+|\d{1,6})(?:\.(\d{1,2}))?$/.exec(input.trim());
   if (!match) return null;
-  const cents = Number(match[1]) * 100 + Number((match[2] ?? '').padEnd(2, '0'));
+  const cents = Number(match[1].replaceAll(',', '')) * 100 + Number((match[2] ?? '').padEnd(2, '0'));
   return cents >= 1 && cents <= LIMITS.maxCents ? cents : null;
 }
 

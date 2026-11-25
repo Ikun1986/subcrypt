@@ -76,7 +76,9 @@ img {
 }
 
 /* Focus: a visible ring on every control. The transparent outline keeps it visible in forced-colors mode. */
-:focus-visible {
+:focus-visible,
+/* Date inputs focus an inner segment, so the input itself never matches :focus-visible */
+input[type="date"]:focus-within {
   outline: 2px solid transparent;
   box-shadow: var(--focus-ring);
 }
