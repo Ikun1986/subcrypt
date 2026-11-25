@@ -132,10 +132,20 @@
 }
 
 @media (min-width: 1024px) {
-  /* Hang in the margin left of the title */
+  /* Hang inside the header, in the open space just right of the title (clear of the tagline and buttons) */
   .spider {
+    --spider-drop: 4rem;
     right: auto;
-    left: -2.25rem;
+    left: 17.5rem;
+  }
+  .spider__body {
+    width: 2rem;
+    height: 2rem;
+  }
+  .spider__legs,
+  .spider__abdomen,
+  .spider__head {
+    stroke: #c3cbe0;
   }
 }
 
@@ -223,10 +233,10 @@
     height: 2.25rem;
   }
   72% {
-    height: 6rem;
+    height: var(--spider-drop, 6rem);
   }
   84% {
-    height: 6rem;
+    height: var(--spider-drop, 6rem);
   }
   94%,
   100% {
