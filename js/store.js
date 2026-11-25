@@ -1,6 +1,7 @@
 // In-memory state, actions, and persistence. One-way flow: action -> save -> notify.
-import { newId, rollForward, rollForwardAll, todayISO, yearlyCents, isBuried } from './model.js';
+import { isValidISO, newId, rollForward, rollForwardAll, todayISO, yearlyCents, isBuried } from './model.js';
 import { makeDemo } from './demo.js';
+import { validateSubscription } from './schema.js';
 
 export const NOTICE_TEXT = {
   corrupt: 'Your saved graveyard was unreadable. A backup was kept.',
@@ -82,22 +83,27 @@ export function createStore({ storage, now = () => new Date(), makeId = newId })
       return () => listeners.delete(fn);
     },
 
-    /** `draft` is the validated output of validateDraft. */
+    /**
+     * `draft` should be the output of validateDraft. The store re-validates anyway,
+     * so bad data can never be written. Returns the new subscription, or null if rejected.
+     */
     addSubscription(draft) {
       const t = today();
-      const sub = {
+      const candidate = {
         id: makeId(),
         name: draft.name,
         priceCents: draft.priceCents,
         cycle: draft.cycle,
-        nextRenewal: rollForward(draft.nextRenewal, draft.cycle, t),
+        nextRenewal: isValidISO(draft.nextRenewal) ? rollForward(draft.nextRenewal, draft.cycle, t) : draft.nextRenewal,
         category: draft.category,
         status: draft.status,
         lastConfirmed: t,
         createdAt: t,
       };
-      commit([...state.subs, sub]);
-      return sub;
+      const checked = validateSubscription(candidate);
+      if (!checked.ok) return null;
+      commit([...state.subs, checked.value]);
+      return checked.value;
     },
 
     confirmStillUsing(id) {

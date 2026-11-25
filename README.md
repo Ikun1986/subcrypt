@@ -22,6 +22,8 @@ Built for the **Kiroween 2026** hackathon, **Costume Contest** category.
 - **Still using it:** resets the idle timer and lifts the zombie curse.
 - **Your data stays with you:** saved in `localStorage`, with JSON export and import. No backend, no accounts, no network requests.
 
+- **Halloween touches:** jack-o'-lanterns with flickering light, bats flapping across the sky, a spider that drops from the header, twinkling stars. All inline SVG and CSS, purely decorative, and still when `prefers-reduced-motion` is on.
+
 All brands in the demo data are fictional: MoonMusic, CloudVault, StreamPeak, FitGhost.
 
 ## Run it
