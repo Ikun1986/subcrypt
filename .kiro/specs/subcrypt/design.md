@@ -61,7 +61,7 @@ Data flow is one-directional: a DOM event calls a store action, the action updat
 /js/render/dashboard.js   Burn dashboard
 /js/render/banner.js      Haunting banner
 /js/render/rip.js         RIP section
-/js/render/dialogs.js     Add form, confirm dialog, focus trap
+/js/render/dialogs.js     Add form and confirm dialog wiring (native <dialog>)
 /assets/fonts/            Self-hosted OFL font files
 /assets/svg/              Moon, ghost, candle, tombstone silhouettes
 ```
@@ -75,7 +75,7 @@ Data flow is one-directional: a DOM event calls a store action, the action updat
 todayISO(now = new Date()) -> string
 daysBetween(fromISO, toISO) -> integer          // to - from, in whole days
 addCycle(dateISO, cycle) -> string               // month-end clamped (Req 5.2)
-rollForward(dateISO, cycle, todayISO) -> string  // smallest date >= today
+rollForward(dateISO, cycle, todayISO) -> string  // smallest date >= today, stepping from the original date so a month-end clamp does not drift
 
 // Money (integer cents)
 monthlyCents(sub) -> integer   // yearly: Math.round(price / 12)
@@ -90,8 +90,11 @@ renewalLabel(days) -> string         // "Renews today" / "tomorrow" / "in N days
 confirmedLabel(sub, todayISO) -> string
 
 // Aggregates
-totals(subs, todayISO) -> { monthlyCents, yearlyCents, deadMonthlyCents, savedYearlyCents }
-hauntingSummary(subs, todayISO) -> { count, dueCents, ids }
+totals(subs, todayISO) -> { monthlyCents, yearlyCents, deadMonthlyCents, savedYearlyCents, zombieCount }
+hauntingSummary(subs, todayISO) -> { count, dueCents, ids, names }
+bannerText(summary) -> string        // "2 hauntings this week — $27.98 due"
+sortBuried(subs) -> subs[]           // most recently buried first
+rollForwardAll(subs, todayISO) -> { subs, changed }
 epitaph(sub) -> string               // "RIP MoonMusic — saved $39/year"
 sortForGraveyard(subs) -> subs[]     // nextRenewal asc, then name (Req 1.4)
 ```
@@ -112,16 +115,21 @@ validateExportFile(text, byteSize) -> { ok: true, subs } | { ok: false, message 
 
 ```js
 createStore({ storage, now }) -> {
-  getState() -> { subs, storageOk, bannerDismissedKey, notice }
+  init()                    // load, seed demo, roll forward, notify
+  getState() -> { subs, storageOk, notices }
+  getToday(), getSub(id)
   subscribe(fn) -> unsubscribe
-  addSubscription(draft)
+  addSubscription(draft)    // also rolls a past renewal date forward
   confirmStillUsing(id)
   bury(id)
-  replaceAll(subs)          // import + reset demo
-  dismissBanner(key)
-  clearNotice()
+  replaceAll(subs)          // import
+  resetDemo()
+  refreshDate()             // midnight rollover
+  addNotice(key, text, tone, persistent), dismissNotice(key)
 }
 ```
+
+Banner dismissal is view state held in `app.js`, not in the store (see "Haunting banner dismissal").
 
 Every mutating action calls `storage.save(subs)` and then notifies subscribers. `now` is injectable for testing and for the demo.
 
@@ -147,7 +155,8 @@ save(subs) -> boolean
 
 - `dom.js` exports `h(tag, attrs, ...children)`. Children that are strings become text nodes. It never uses `innerHTML` for data, which covers Req 10.7.
 - Each render function takes state plus `todayISO` and returns a DOM subtree. `app.js` replaces the region's children.
-- Tombstones carry `data-id`. Before a re-render, `app.js` records which ids are mid-animation and skips replacing them until `animationend` fires (or immediately under reduced motion).
+- Tombstones carry `data-id`. `graveyard.js` keeps a keyed map of elements and rebuilds one only when its content signature changes, so candle and ghost animations keep running. A tombstone mid-sink is never rebuilt. When a zombie stops being one, the replacement element is built in its old zombie look and released on the next frames so CSS transitions it back to upright.
+- Rebuilding a tombstone drops keyboard focus, so `app.js` remembers which action button was focused and refocuses its equivalent after rendering.
 
 ### Burial animation sequence
 
@@ -160,7 +169,7 @@ The store updates after the animation, so a reload mid-animation leaves the subs
 
 ### Haunting banner dismissal
 
-The banner key is the sorted list of Haunting ids joined by commas. Dismissal stores that key in memory only. When the set changes, the key changes and the banner shows again (Req 4.4).
+The banner key is the sorted list of Haunting ids joined by commas. `app.js` keeps the dismissed key in a variable (memory only). When the set changes, the key changes and the banner shows again. When no Haunting subscriptions remain, the dismissed key is cleared (Req 4.4).
 
 ### Dialogs
 
@@ -252,7 +261,7 @@ Notices appear in a single dismissible status area with `role="status"`.
 
 ## Testing Strategy
 
-Pure modules (`model.js`, `schema.js`) hold the risky logic and can be tested in Node without a DOM. Tests are optional for the hackathon MVP and listed as optional tasks:
+Pure modules (`model.js`, `schema.js`) and the store hold the risky logic and are tested in Node without a DOM. Run them with `npm test` (no dependencies, `tests/*.test.js`):
 
 - Unit tests with Node's built-in `node:test`, which needs no dependencies: month-end clamping, roll-forward, zombie threshold at 29/30 days, haunt window at 0/7/8 days, totals, epitaph formatting, import validation cases.
 - Manual checklist in `tasks.md` covering each requirement in Chrome, Firefox, and Safari, plus reduced motion and keyboard-only passes.

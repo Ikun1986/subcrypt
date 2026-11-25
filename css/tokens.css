@@ -1,0 +1,92 @@
+/* SubCrypt graveyard design tokens.
+   Source of truth: .kiro/steering/design-tokens.md. Add tokens there first. */
+:root {
+  /* Color */
+  --color-night: #0b0f1a;
+  --color-sky-mid: #141b2e;
+  --color-sky-horizon: #23304a;
+  --color-panel: #161b28;
+  --color-ground: #0e1410;
+  --color-moss: #2f4a34;
+  --color-stone: #2e333d;
+  --color-stone-edge: #454b57;
+  --color-stone-shadow: #14171d;
+  --color-bone: #ece6d6;
+  --color-muted: #b5af9e;
+  --color-moon: #f4f1e1;
+  --color-moon-halo: rgba(244, 241, 225, 0.18);
+  --color-fog: rgba(200, 210, 225, 0.1);
+  --color-ecto: #7cff9b;
+  --color-ecto-glow: rgba(124, 255, 155, 0.45);
+  --color-ghost: rgba(230, 240, 255, 0.85);
+  --color-candle: #ffb347;
+  --color-candle-glow: rgba(255, 179, 71, 0.35);
+  --color-blood: #ff7a6b;
+  --color-blood-deep: #8b1e1e;
+  --color-rip: #1b1f26;
+
+  /* Typography */
+  --font-display: "Creepster", "Georgia", serif;
+  --font-engraved: "IM Fell English", "Georgia", "Times New Roman", serif;
+  --font-body: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --numeric-money: tabular-nums;
+  --text-xs: 0.75rem;
+  --text-sm: 0.875rem;
+  --text-md: 1rem;
+  --text-lg: 1.25rem;
+  --text-xl: 1.75rem;
+  --text-display: clamp(2.25rem, 6vw, 4rem);
+  --leading-tight: 1.15;
+  --leading-body: 1.5;
+  --tracking-engraved: 0.04em;
+
+  /* Spacing, size, shape */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-6: 1.5rem;
+  --space-8: 2rem;
+  --space-12: 3rem;
+  --tomb-width: clamp(11rem, 28vw, 14rem);
+  --tomb-min-height: 15rem;
+  --radius-tomb-top: 50% 50% 0.5rem 0.5rem / 38% 38% 0.5rem 0.5rem;
+  --radius-sm: 0.375rem;
+  --radius-md: 0.75rem;
+  --border-tomb: 2px solid var(--color-stone-edge);
+  --tap-target: 2.75rem;
+
+  /* Light, shadow, glow */
+  --shadow-tomb: 0 0.75rem 1.5rem var(--color-stone-shadow);
+  --shadow-engrave: inset 0 1px 0 rgba(0, 0, 0, 0.6), 0 1px 0 rgba(255, 255, 255, 0.06);
+  --glow-zombie: 0 0 1.25rem 0.25rem var(--color-ecto-glow);
+  --glow-candle: 0 0 1rem 0.35rem var(--color-candle-glow);
+  --glow-moon: 0 0 4rem 1.5rem var(--color-moon-halo);
+  --focus-ring: 0 0 0 3px var(--color-night), 0 0 0 5px var(--color-candle);
+
+  /* Motion */
+  --ease-haunt: cubic-bezier(0.45, 0, 0.55, 1);
+  --ease-sink: cubic-bezier(0.55, 0, 1, 0.45);
+  --ease-out: cubic-bezier(0.2, 0.8, 0.2, 1);
+  --motion-fast: 150ms;
+  --motion-base: 300ms;
+  --motion-upright: 600ms;
+  --motion-sink: 1400ms;
+  --motion-ghost-float: 4s;
+  --motion-candle-flicker: 2.2s;
+  --motion-fog-slow: 60s;
+  --motion-fog-fast: 38s;
+  --zombie-tilt: -7deg;
+  --ghost-float-distance: 0.75rem;
+
+  /* Layers */
+  --z-sky: 0;
+  --z-moon: 1;
+  --z-fog-back: 2;
+  --z-ground: 3;
+  --z-tombs: 4;
+  --z-fog-front: 5;
+  --z-ghosts: 6;
+  --z-banner: 20;
+  --z-dialog: 30;
+}
