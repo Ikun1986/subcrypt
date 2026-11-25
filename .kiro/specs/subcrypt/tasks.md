@@ -85,8 +85,8 @@ Tasks are ordered so each step builds on the previous one and the app is runnabl
 
 - [x] 12. Deploy and verify
   - [ ] 12.1 Enable GitHub Pages on `main` root; confirm the app loads under `/subcrypt/` with no console errors or external requests.
-    - Done: Pages enabled on `main` root; app verified under a local `/subcrypt/` prefix with no console errors, no 4xx responses, and no external requests.
-    - Remaining: confirm the live URL after the pull request is merged to `main`.
+    - Done: app verified under a local `/subcrypt/` prefix with no console errors, no 4xx responses, and no external requests.
+    - Remaining: enable Pages by hand (Settings > Pages > Deploy from a branch > `main` / root; the API call from this environment returned 403), merge the pull request, then confirm the live URL.
     - _Requirements: 13.1, 13.2_
   - [ ] 12.2 Manual checklist in Chrome, Firefox, and Safari: every acceptance criterion, keyboard-only pass, reduced-motion pass, a scan of UI copy for real trademarks.
     - Done in Chromium (scripted, 79 checks): acceptance criteria for Requirements 1–11, keyboard focus rings, reduced motion, mobile layout, unavailable and corrupt storage. Trademark scan is clean.
