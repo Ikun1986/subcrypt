@@ -105,7 +105,7 @@
 .spider__thread {
   display: block;
   width: 1px;
-  height: 2.25rem;
+  height: var(--spider-rest, 2.25rem);
   background: var(--color-muted);
   opacity: 0.7;
 }
@@ -146,6 +146,18 @@
   .spider__abdomen,
   .spider__head {
     stroke: #c3cbe0;
+  }
+}
+
+/* Tablet (640-1023px): the toolbar wraps under the tagline, so there is no tall open space.
+   Hang just right of the title with a short thread; the drop is tied to the title size
+   (tagline top is about 6.9vw + 24px) so the body always stops above the tagline. */
+@media (min-width: 640px) and (max-width: 1023px) {
+  .spider {
+    --spider-rest: 1.25rem;
+    --spider-drop: calc(6.9vw - 6px);
+    right: auto;
+    left: calc(22.7vw + 1rem);
   }
 }
 
@@ -230,7 +242,7 @@
 @keyframes spider-drop {
   0%,
   62% {
-    height: 2.25rem;
+    height: var(--spider-rest, 2.25rem);
   }
   72% {
     height: var(--spider-drop, 6rem);
@@ -240,7 +252,7 @@
   }
   94%,
   100% {
-    height: 2.25rem;
+    height: var(--spider-rest, 2.25rem);
   }
 }
 
