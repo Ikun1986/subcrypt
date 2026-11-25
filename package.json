@@ -1,0 +1,10 @@
+{
+  "name": "subcrypt",
+  "version": "1.0.0",
+  "private": true,
+  "description": "SubCrypt turns subscription management into a moonlit graveyard. Static app, no build step.",
+  "type": "module",
+  "scripts": {
+    "test": "node --test \"tests/*.test.js\""
+  }
+}

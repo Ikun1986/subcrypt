@@ -1,0 +1,8 @@
+# OS and editor files only. Never ignore .kiro/.
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+.idea/
+.vscode/
+node_modules/
